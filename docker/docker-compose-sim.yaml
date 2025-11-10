@@ -1,0 +1,91 @@
+# Usage:
+#
+# To build the images:
+#   docker compose build
+#
+# To start up a specific service by name:
+#   docker compose up <service_name>
+#
+# To open an interactive shell to a running container:
+#   docker exec -it <container_name> bash
+
+services:
+  # sim image containing dependencies.
+  sim:
+    image: waterbot:sim
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        ROS_DISTRO: ${ROS_DISTRO:-jazzy}
+      target: sim
+    # Interactive shell
+    stdin_open: true
+    tty: true
+    # Networking and IPC for ROS 2
+    network_mode: host
+    ipc: host
+    ports:
+      - "127.0.0.1:9090:9090"
+    # Needed to display graphical applications
+    privileged: True
+    environment:
+      # Needed to define a TurtleBot3 model type
+      - TURTLEBOT3_MODEL=${TURTLEBOT3_MODEL:-waffle_pi}
+      # Allows graphical programs in the container.
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      # Allows graphical programs in the container.
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
+      # Allows usb devices
+      #   - /dev:/dev
+      # device_cgroup_rules:
+      #   - 'c 81:* rmw'
+      #   - 'c 189:* rmw'
+
+  overlay:
+    extends: sim
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: overlay
+      args:
+        BRINGUP_BASE: sim
+
+  # Developer container
+  dev:
+    extends: ${DEV_BASE:-overlay} # sim or overlay
+    image: waterbot:${DEV_BASE:-overlay}-dev
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: dev
+      args:
+        DEV_BASE: ${DEV_BASE:-overlay}
+        UID: ${UID:-1000}
+        GID: ${UID:-1000}
+        USERNAME: ${USERNAME:-devuser}
+    volumes:
+      # Mount the source code
+      - ../${DEV_BASE:-overlay}:/${DEV_BASE:-overlay}_ws/src/${DEV_BASE:-overlay}:rw
+      # Mount colcon build artifacts for faster rebuilds
+      # - ../../.colcon/build/:/sim_ws/build/:rw
+      # - ../../.colcon/install/:/sim_ws/install/:rw
+      # - ../../.colcon/log/:/sim_ws/log/:rw
+    user: ${USERNAME:-devuser}
+    command: bash
+
+  launch_sim:
+    extends: overlay
+    command: ros2 launch turtle_bot_sim_world turtle_bot_test_world.launch.py
+
+  launch_overlay:
+    extends: overlay
+    command: ros2 launch water_bot_demo overlay.launch.xml
+
+  launch_demo:
+    extends: overlay
+    command: ros2 launch water_bot_demo water_bot_demo.launch.py

@@ -1,0 +1,13 @@
+<launch>
+  <!-- rmw_zenoh -->
+  <node pkg="rmw_zenoh_cpp" exec="rmw_zenohd" output="screen"/>
+
+  <!-- Launch YDLidar X3 Pro -->
+  <include file="$(find-pkg-share ydlidar_ros2_driver)/launch/ydlidar_launch.py">
+    <arg name="params_file" value="$(find-pkg-share jetbot_bringup)/params/ydlidar_X3.yaml"/>
+  </include>
+
+  <!-- water_bot_control -->
+  <!-- <include file="$(find-pkg-share water_bot_control)/launch/diffbot.launch.py"/> -->
+
+</launch>
