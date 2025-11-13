@@ -1,6 +1,12 @@
 
 # 🤖 Jetbot Diffdrive ROS2
 
+## Hardware
+- Jetson Nano
+- Arduino Uno
+- LIDAR YDLIDAR X3 PRO
+- Motor Driver L298N
+  
 ![diy-jetbot](./assets/diy-jetbot.jpeg)
 
 ## 🐳 Docker Setup
@@ -25,3 +31,8 @@ docker compose -f docker-compose.yaml up dev
 ```bash
 docker exec -it dev bash
 ```
+
+## References
+- https://github.com/joshnewans/ros_arduino_bridge
+- https://github.com/YDLIDAR/ydlidar_ros2_driver
+- https://github.com/YDLIDAR/YDLidar-SDK.git
