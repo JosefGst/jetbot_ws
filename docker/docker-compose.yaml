@@ -66,4 +66,4 @@ services:
 
   launch_bringup:
     extends: bringup
-    command: ros2 launch water_bot_bringup water_bot_bringup.launch.xml
+    command: ros2 launch jetbot_bringup bringup.launch.xml
