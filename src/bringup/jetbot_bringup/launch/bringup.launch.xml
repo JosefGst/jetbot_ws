@@ -7,7 +7,10 @@
     <arg name="params_file" value="$(find-pkg-share jetbot_bringup)/params/ydlidar_X3.yaml"/>
   </include>
 
-  <!-- water_bot_control -->
-  <!-- <include file="$(find-pkg-share water_bot_control)/launch/diffbot.launch.py"/> -->
+  <!-- diffdrive_arduino -->
+  <include file="$(find-pkg-share diffdrive_arduino)/launch/diffbot.launch.py">
+    <arg name="use_mock_hardware" value="false"/>
+    <arg name="gui" value="False"/>
+  </include>
 
 </launch>

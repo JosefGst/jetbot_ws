@@ -156,6 +156,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gdb gdbserver vim \
     ros-${ROS_DISTRO}-rviz2 \
     ros-${ROS_DISTRO}-rqt-graph \
+    ros-${ROS_DISTRO}-teleop-twist-keyboard\
     # # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
