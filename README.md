@@ -14,17 +14,17 @@
 mkdir -p ~/ros && cd ~/ros
 git clone git@github.com:JosefGst/jetbot_ws.git
 cd jetbot_ws/docker
-docker compose -f docker-compose.yaml build
+docker compose build
 ```
 
 ## 🚀 Start the Bringup
 ```bash
-docker compose -f docker-compose.yaml up launch_bringup
+docker compose up launch_bringup
 ```
 
 ## 💻 Development Container
 ```bash
-docker compose -f docker-compose.yaml up dev
+docker compose up dev
 ```
 
 ## 🔗 Connect to the Dev Container
