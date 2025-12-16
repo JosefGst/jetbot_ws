@@ -59,7 +59,7 @@ services:
         - USERNAME=${USERNAME:-devuser}
     volumes:
       # Mount the source code
-      - ../src:/bringup_ws/src:rw
+      - ../src/bringup:/bringup_ws/src/bringup:rw
     user: ${USERNAME:-devuser}
     command: bash
 
